@@ -63,6 +63,8 @@ body {
   margin: 0;
   position: relative;
   min-height: 100dvh;
+  /* iOS 26+ safe-area: push content below the notch / Dynamic Island. */
+  padding-top: env(safe-area-inset-top);
   background: var(--canvas);
   color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -100,7 +102,11 @@ input { font: inherit; color: inherit; }
   top: 0;
   width: 100%;
   background: var(--header-bg);
-  padding: 6px var(--pad-x) 0;
+  /* Extend header bg up into the iOS safe-area-inset-top zone so the notch
+     area is filled with header chrome (white) instead of revealing scrolled-
+     past map content during over-scroll bounces. */
+  padding: calc(6px + env(safe-area-inset-top)) var(--pad-x) 0;
+  margin-top: calc(-1 * env(safe-area-inset-top));
   z-index: 15;
   border-bottom: 1px solid var(--border-subtle);
 }
