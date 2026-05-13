@@ -264,17 +264,21 @@ input { font: inherit; color: inherit; }
   pointer-events: none;
   overflow: visible;
 }
+/* Trail — always dotted, only colour differs between done/current ↔ other. */
 .trail path {
   fill: none;
-  stroke: #C18B5A;
-  stroke-width: 4;
+  stroke-width: 6;
   stroke-linecap: round;
-  filter: drop-shadow(0 1px 0 rgba(24, 19, 12, 0.18));
+  stroke-dasharray: 0.01 14;          /* dots, no line */
+  filter: drop-shadow(0 1px 0 rgba(24, 19, 12, 0.15));
+}
+.trail path.solid {
+  stroke: var(--primary-500);          /* orange between done/current pairs */
+  opacity: 0.95;
 }
 .trail path.dashed {
-  stroke: #BBA585;
-  stroke-dasharray: 4 10;
-  opacity: 0.7;
+  stroke: #BBA585;                     /* warm brown for not-yet-reached */
+  opacity: 0.75;
 }
 
 .islands {
@@ -351,7 +355,8 @@ input { font: inherit; color: inherit; }
 }
 .island.state-locked img,
 .island.state-locked .island-placeholder {
-  filter: grayscale(0.92) brightness(0.55) contrast(0.92);
+  /* Locked — colour preserved but muted; reads dimmer than active but not grey. */
+  filter: grayscale(0.30) brightness(0.78) saturate(0.65) contrast(0.96);
 }
 
 /* Press feedback — must be visible BEFORE navigation */
