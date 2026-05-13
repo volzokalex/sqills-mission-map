@@ -42,11 +42,19 @@
     }
   };
 
+  // Manual hard-reset: visiting `?reset=1` wipes the stored roster.
+  if (/[?&]reset(=|&|$)/.test(location.search)) {
+    Store.clear();
+  }
   let missions = Store.load();
-  // First-visit bootstrap: if localStorage is empty AND sample-data.js was
-  // loaded, seed the roster with the bundled missions so the demo isn't blank.
-  if (missions.length === 0 && Array.isArray(window.MISSION_MAP_SAMPLE_DATA)) {
-    missions = window.MISSION_MAP_SAMPLE_DATA.map(m => ({ ...m }));
+  // Seed from sample-data.js when:
+  //   a) localStorage is empty (first visit), or
+  //   b) every stored mission is missing imageData — a sign that the page was
+  //      opened in an older version that initialised the roster without art.
+  const sample = Array.isArray(window.MISSION_MAP_SAMPLE_DATA) ? window.MISSION_MAP_SAMPLE_DATA : null;
+  const everyMissionImageMissing = missions.length > 0 && missions.every(m => !m.imageData);
+  if (sample && (missions.length === 0 || everyMissionImageMissing)) {
+    missions = sample.map(m => ({ ...m }));
     Store.save(missions);
   }
 
