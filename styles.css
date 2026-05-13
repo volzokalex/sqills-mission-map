@@ -262,25 +262,28 @@ input { font: inherit; color: inherit; }
   height: 100%;
   z-index: 1;
   pointer-events: none;
-  overflow: visible;
 }
-/* Trail — small 4×4 square cubes, no line. Light shadow for volume. */
-.trail path {
-  fill: none;
-  stroke-width: 4;
-  stroke-linecap: butt;               /* squared ends — no round caps */
-  stroke-dasharray: 4 8;              /* 4×4 cube, 8px gap */
-  filter:
-    drop-shadow(0 1px 0 rgba(24, 19, 12, 0.20))
-    drop-shadow(0 2px 3px rgba(24, 19, 12, 0.10));
+/* Trail dots — rounded squares (≈CTA radius), stronger shadow for 3D feel. */
+.trail-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2.5px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-.trail path.solid {
-  stroke: var(--primary-500);          /* orange between done/current pairs */
-  opacity: 0.95;
+.trail-dot--solid {
+  background: var(--primary-500);
+  box-shadow:
+    0 2px 0 0 var(--primary-700),
+    0 5px 10px rgba(229, 95, 0, 0.40);
 }
-.trail path.dashed {
-  stroke: #B89770;                     /* warmer brown for not-yet-reached */
-  opacity: 0.85;
+.trail-dot--dashed {
+  background: #B89770;
+  box-shadow:
+    0 2px 0 0 #8A6A45,
+    0 5px 10px rgba(140, 100, 60, 0.30);
+  opacity: 0.92;
 }
 
 .islands {

@@ -241,20 +241,38 @@
     emptyStateEl.hidden = true;
     trailEl.style.display = '';
 
-    // Trail SVG
-    trailEl.setAttribute('viewBox', `0 0 100 ${h}`);
-    trailEl.setAttribute('preserveAspectRatio', 'none');
+    // Trail dots — rendered as absolutely-positioned divs along a bezier curve
+    // between each adjacent pair. Pixel-accurate shadow + radius via CSS.
+    const DOTS_PER_SEGMENT = 14;
     let trailHtml = '';
     for (let i = 0; i < count - 1; i++) {
       const a = missions[i];
       const b = missions[i + 1];
       const solid = (a.state === 'done' || a.state === 'current')
         && (b.state === 'done' || b.state === 'current');
-      const d = curvedPath(
-        islandXPct(i, count), islandY(i) + ISLAND_SIZE / 2,
-        islandXPct(i + 1, count), islandY(i + 1) + ISLAND_SIZE / 2
-      );
-      trailHtml += `<path d="${d}" class="${solid ? 'solid' : 'dashed'}"/>`;
+      const cls = solid ? 'trail-dot--solid' : 'trail-dot--dashed';
+      const x1 = islandXPct(i, count);
+      const y1 = islandY(i) + ISLAND_SIZE / 2;
+      const x2 = islandXPct(i + 1, count);
+      const y2 = islandY(i + 1) + ISLAND_SIZE / 2;
+      // Quadratic-bezier control point (matches the prior curvedPath formula).
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2;
+      const dxPct = x2 - x1;
+      const dy = y2 - y1;
+      const lenApprox = Math.hypot(dxPct * 2, dy);
+      const px = -dy / lenApprox;
+      const py = (dxPct * 2) / lenApprox;
+      const off = 18;
+      const cx = mx + px * off;
+      const cy = my + py * off;
+      for (let k = 1; k <= DOTS_PER_SEGMENT; k++) {
+        const t = k / (DOTS_PER_SEGMENT + 1);
+        const u = 1 - t;
+        const x = u * u * x1 + 2 * u * t * cx + t * t * x2;
+        const y = u * u * y1 + 2 * u * t * cy + t * t * y2;
+        trailHtml += `<div class="trail-dot ${cls}" style="left:${x.toFixed(2)}%;top:${y.toFixed(0)}px"></div>`;
+      }
     }
     trailEl.innerHTML = trailHtml;
 
