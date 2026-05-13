@@ -654,7 +654,14 @@ input { font: inherit; color: inherit; }
   .island.shake { animation: none; }
 }
 
-/* No desktop overrides — one continuous bg, prototype anchored left under header. */
+/* ---------- Desktop frame: lock the app to 9:16, centre it, white sides ---------- */
+@media (min-width: 460px) {
+  html { background: #FFFFFF; }       /* sides outside the frame */
+  body {
+    width: min(100vw, calc(100dvh * 9 / 16), var(--max-width));
+    margin: 0 auto;
+  }
+}
 
 /* ---------- Mission preview overlay ---------- */
 .preview {

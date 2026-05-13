@@ -43,6 +43,12 @@
   };
 
   let missions = Store.load();
+  // First-visit bootstrap: if localStorage is empty AND sample-data.js was
+  // loaded, seed the roster with the bundled missions so the demo isn't blank.
+  if (missions.length === 0 && Array.isArray(window.MISSION_MAP_SAMPLE_DATA)) {
+    missions = window.MISSION_MAP_SAMPLE_DATA.map(m => ({ ...m }));
+    Store.save(missions);
+  }
 
   /* ---------- Image processing ----------
      Alex supplies uniform-canvas transparent-bg PNGs where the visible island
