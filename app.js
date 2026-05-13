@@ -394,7 +394,9 @@
   });
   previewCtaEl.addEventListener('click', () => {
     if (!previewMissionId) return;
-    const target = `../mission-page/mission-page-v3.html#mission-${encodeURIComponent(previewMissionId)}`;
+    // Mission page lives at its own GitHub Pages repo. Same URL for every
+    // mission (only one prototype page exists today); id passes via hash.
+    const target = `https://volzokalex.github.io/shai-mission-page-v3/#mission-${encodeURIComponent(previewMissionId)}`;
     console.log('[mission-map] navigating from preview →', target);
     window.location.href = target;
   });
