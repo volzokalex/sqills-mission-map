@@ -263,13 +263,13 @@ input { font: inherit; color: inherit; }
   z-index: 1;
   pointer-events: none;
 }
-/* Trail dots — rounded squares (≈CTA radius), stronger shadow for 3D feel. */
+/* Trail dots — rounded rectangles, rotated to lie along the curve tangent. */
 .trail-dot {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 2.5px;
-  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 6px;
+  border-radius: 2px;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
   pointer-events: none;
 }
 .trail-dot--solid {

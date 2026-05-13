@@ -241,9 +241,11 @@
     emptyStateEl.hidden = true;
     trailEl.style.display = '';
 
-    // Trail dots — rendered as absolutely-positioned divs along a bezier curve
-    // between each adjacent pair. Pixel-accurate shadow + radius via CSS.
+    // Trail dots — divs sampled along each pair's quadratic bezier. Each dot
+    // gets a --rot var so its long axis aligns with the local tangent (the
+    // "short faces" point at the next dot along the curve, like train ties).
     const DOTS_PER_SEGMENT = 14;
+    const mapWidthPx = mapEl.getBoundingClientRect().width || 430;
     let trailHtml = '';
     for (let i = 0; i < count - 1; i++) {
       const a = missions[i];
@@ -255,7 +257,6 @@
       const y1 = islandY(i) + ISLAND_SIZE / 2;
       const x2 = islandXPct(i + 1, count);
       const y2 = islandY(i + 1) + ISLAND_SIZE / 2;
-      // Quadratic-bezier control point (matches the prior curvedPath formula).
       const mx = (x1 + x2) / 2;
       const my = (y1 + y2) / 2;
       const dxPct = x2 - x1;
@@ -271,7 +272,14 @@
         const u = 1 - t;
         const x = u * u * x1 + 2 * u * t * cx + t * t * x2;
         const y = u * u * y1 + 2 * u * t * cy + t * t * y2;
-        trailHtml += `<div class="trail-dot ${cls}" style="left:${x.toFixed(2)}%;top:${y.toFixed(0)}px"></div>`;
+        // Tangent (derivative of quadratic bezier). dx is in percent units,
+        // dy in px — convert dx to px so the rotation matches the rendered
+        // geometry.
+        const dxPctT = 2 * (u * (cx - x1) + t * (x2 - cx));
+        const dyPxT  = 2 * (u * (cy - y1) + t * (y2 - cy));
+        const dxPxT  = dxPctT * mapWidthPx / 100;
+        const rot = Math.atan2(dyPxT, dxPxT) * 180 / Math.PI;
+        trailHtml += `<div class="trail-dot ${cls}" style="left:${x.toFixed(2)}%;top:${y.toFixed(0)}px;--rot:${rot.toFixed(1)}deg"></div>`;
       }
     }
     trailEl.innerHTML = trailHtml;
