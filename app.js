@@ -364,8 +364,10 @@
         el.classList.add('pressed');
         pressTimer = setTimeout(finish, PRESS_NAV_DELAY_MS);
       });
+      // Only abort on pointercancel — the browser fires this when a tap
+      // converts to scroll. pointerleave was over-eager on real iOS Safari:
+      // a 1-2px finger drift would cancel taps before they could resolve.
       el.addEventListener('pointercancel', abort);
-      el.addEventListener('pointerleave', abort);
     });
   }
 
