@@ -264,15 +264,15 @@ input { font: inherit; color: inherit; }
   pointer-events: none;
   overflow: visible;
 }
-/* Trail — square cubes, no line. Volume via stacked drop-shadow. */
+/* Trail — small 4×4 square cubes, no line. Light shadow for volume. */
 .trail path {
   fill: none;
-  stroke-width: 8;
+  stroke-width: 4;
   stroke-linecap: butt;               /* squared ends — no round caps */
-  stroke-dasharray: 8 12;             /* 8×8 square dot, 12px gap */
+  stroke-dasharray: 4 8;              /* 4×4 cube, 8px gap */
   filter:
-    drop-shadow(0 1.5px 0 rgba(24, 19, 12, 0.18))
-    drop-shadow(0 3px 4px rgba(24, 19, 12, 0.10));
+    drop-shadow(0 1px 0 rgba(24, 19, 12, 0.20))
+    drop-shadow(0 2px 3px rgba(24, 19, 12, 0.10));
 }
 .trail path.solid {
   stroke: var(--primary-500);          /* orange between done/current pairs */
