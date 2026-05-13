@@ -264,21 +264,23 @@ input { font: inherit; color: inherit; }
   pointer-events: none;
   overflow: visible;
 }
-/* Trail — always dotted, only colour differs between done/current ↔ other. */
+/* Trail — chunky square dots, no line. Volume via stacked drop-shadow. */
 .trail path {
   fill: none;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-dasharray: 0.01 14;          /* dots, no line */
-  filter: drop-shadow(0 1px 0 rgba(24, 19, 12, 0.15));
+  stroke-width: 12;
+  stroke-linecap: butt;               /* squared ends — no round caps */
+  stroke-dasharray: 12 18;            /* 12px square dot, 18px gap */
+  filter:
+    drop-shadow(0 2px 0 rgba(24, 19, 12, 0.18))
+    drop-shadow(0 4px 6px rgba(24, 19, 12, 0.10));
 }
 .trail path.solid {
   stroke: var(--primary-500);          /* orange between done/current pairs */
   opacity: 0.95;
 }
 .trail path.dashed {
-  stroke: #BBA585;                     /* warm brown for not-yet-reached */
-  opacity: 0.75;
+  stroke: #B89770;                     /* warmer brown for not-yet-reached */
+  opacity: 0.85;
 }
 
 .islands {
