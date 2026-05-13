@@ -264,7 +264,8 @@
       const lenApprox = Math.hypot(dxPct * 2, dy);
       const px = -dy / lenApprox;
       const py = (dxPct * 2) / lenApprox;
-      const off = 18;
+      // Alternate curve side per segment → R-L-R-L pattern between islands.
+      const off = 22 * (i % 2 === 0 ? 1 : -1);
       const cx = mx + px * off;
       const cy = my + py * off;
       for (let k = 1; k <= DOTS_PER_SEGMENT; k++) {
